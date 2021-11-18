@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>111</title>
+
+
+</head>
+<body>
+
+<button id="goto_native_1">通过WebView的addJavascriptInterface()调用Android</button>
+
+<button id="goto_native_2">WebViewClient的shouldOverrideUrlLoading()调用Android</button>
+
+<button id="goto_native_3">ChromeClient的onJsAlert-onJsConfirm-onJsPrompt-调用Android</button>
+
+<div id="content">web显示区域</div>
+
+
+<script type="text/javascript">
+
+
+	 document.getElementById("goto_native_1") .addEventListener("click", function() {
+		 jsToNative1.call("js call to native !")
+	});
+    document.getElementById("goto_native_2") .addEventListener("click", function() {
+		  document.location = "js://webview?arg1=111&arg2=222";
+	});
+
+
+
+</script>
+
+</body>
+</html>

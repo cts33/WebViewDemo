@@ -7,5 +7,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "WebViewDemo"
-include ':app'
+//include ':app'
 include ':x5_demo'

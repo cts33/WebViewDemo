@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     WebView webView;
     String url = "https://blog.csdn.net/chentaishan?t=1";
-    String baiduUrl = "https://www.baidu.com/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
