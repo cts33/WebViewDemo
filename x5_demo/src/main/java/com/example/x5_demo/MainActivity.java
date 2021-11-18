@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWebView.evaluateJavascript("javascript:gotoNative()", new ValueCallback<String>() {
+                mWebView.evaluateJavascript("javascript:gotoJS()", new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String s) {
-                        Log.d(TAG, "onReceiveValue: java 调用 js");
+                        Log.d(TAG, "onReceiveValue: java 调用 js   "+s);
                     }
                 });
             }

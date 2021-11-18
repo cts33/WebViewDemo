@@ -19,7 +19,11 @@
 
 
 <script type="text/javascript">
+function gotoJS(){
 
+    document.getElementById("content").innerHTML = "this is native to js"
+    return "success"
+}
 
 	 document.getElementById("goto_native_1") .addEventListener("click", function() {
 		 jsToNative1.call("js call to native !")
