@@ -8,22 +8,25 @@
 
 </head>
 <body>
+<p>webview网页区域</p></br>
 
 <button id="goto_native_1">通过WebView的addJavascriptInterface()调用Android</button>
+<div></div>
 
-<button id="goto_native_2">WebViewClient的shouldOverrideUrlLoading()调用Android</button>
+<button id="goto_native_2">WebViewClient的shouldOverrideUrlLoading()调用Android</button></br>
 
-<button id="goto_native_3">ChromeClient的onJsAlert-onJsConfirm-onJsPrompt-调用Android</button>
+<button id="goto_native_3">ChromeClient的onJsAlert-onJsConfirm-onJsPrompt-调用Android</button></br>
+
 
 <div id="content">web显示区域</div>
 
 
 <script type="text/javascript">
-function gotoJS(){
+    function gotoJS(msg){
+        document.getElementById("content").innerHTML = "这是原生发送过来的msg:"+msg;
 
-    document.getElementById("content").innerHTML = "this is native to js"
-    return "success"
-}
+        "原生，我是js，我收到了你发的信息";
+    }
 
 	 document.getElementById("goto_native_1") .addEventListener("click", function() {
 		 jsToNative1.call("js call to native !")

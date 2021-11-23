@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">X5_Demo</string>
+    <string name="btn1">使用mWebView.loadUrl调用web页面</string>
 </resources>

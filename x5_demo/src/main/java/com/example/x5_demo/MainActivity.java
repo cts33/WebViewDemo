@@ -1,5 +1,6 @@
 package com.example.x5_demo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
@@ -9,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.ServiceWorkerClient;
+import android.webkit.ServiceWorkerController;
+import android.webkit.WebResourceResponse;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,34 +28,38 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     WebView mWebView;
-    Button button;
+    Button button1,button2;
     TextView resultTv;
     private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
 
         mWebView = findViewById(R.id.forum_context);
         resultTv = findViewById(R.id.content);
-        button = findViewById(R.id.goto_web);
-        button.setOnClickListener(new View.OnClickListener() {
+        button1 = findViewById(R.id.goto_web1);
+        button2 = findViewById(R.id.goto_web2);
+
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWebView.evaluateJavascript("javascript:gotoJS()", new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String s) {
-                        Log.d(TAG, "onReceiveValue: java 调用 js   "+s);
-                    }
-                });
+
+                mWebView.loadUrl("javascript:gotoJS("+view.getId()+")");
             }
         });
-        IX5WebViewExtension x5WebViewExtension = mWebView.getX5WebViewExtension();
-
-        Log.d(TAG, "onCreate: " + x5WebViewExtension);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWebView.evaluateJavascript("javascript:gotoJS("+view.getId()+")", s -> Log.d(TAG, "onReceiveValue: java 调用 js   " + s));
+            }
+        });
 
         mWebView.loadUrl("file:///android_asset/index.html");
+//        mWebView.loadUrl("https://www.baidu.com/");
 //        mWebView.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
 
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -79,11 +87,10 @@ public class MainActivity extends AppCompatActivity {
                     // 所以拦截url,下面JS开始调用Android需要的方法
                     if (uri.getAuthority().equals("webview")) {
 
-
                         StringBuffer stringBuffer = new StringBuffer();
                         Set<String> collection = uri.getQueryParameterNames();
-                        for (String item:collection){
-                            stringBuffer.append(item+"="+uri.getQueryParameter(item)+" ");
+                        for (String item : collection) {
+                            stringBuffer.append(item + "=" + uri.getQueryParameter(item) + " ");
                         }
 //                        String result = "Android回调给JS的数据为useid=123456";
 //                        view.loadUrl("javascript:returnResult(\"" + result + "\")");
@@ -97,12 +104,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mWebView.setWebChromeClient(new WebChromeClient() {
 
 
         });
+        //通过addJavascriptInterface() AJavaScriptInterface类对象映射到JS的mjs对象
+        mWebView.addJavascriptInterface(new JsToNativeObj(), "jsToNative1");
 
-        jsToNative1();
     }
 
     public class JsToNativeObj {
@@ -114,9 +122,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void jsToNative1() {
-        //通过addJavascriptInterface() AJavaScriptInterface类对象映射到JS的mjs对象
-        mWebView.addJavascriptInterface(new JsToNativeObj(), "jsToNative1");
-    }
 }
