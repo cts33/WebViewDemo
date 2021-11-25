@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
+import com.tencent.smtt.export.external.interfaces.JsPromptResult;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         mWebView = findViewById(R.id.forum_context);
         resultTv = findViewById(R.id.content);
         button1 = findViewById(R.id.goto_web1);
@@ -52,9 +52,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
+          
+
             @Override
             public void onClick(View view) {
-                mWebView.evaluateJavascript("javascript:gotoJS("+view.getId()+")", s -> Log.d(TAG, "onReceiveValue: java 调用 js   " + s));
+                mWebView.evaluateJavascript("javascript:gotoJS(" + view.getId() + ")", new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String s) {
+                        Log.d(TAG, "onReceiveValue: 此处回调结果");
+                    }
+                });
             }
         });
 
@@ -106,7 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
         mWebView.setWebChromeClient(new WebChromeClient() {
 
+            @Override
+            public boolean onJsPrompt(WebView webView, String s, String s1, String s2, JsPromptResult jsPromptResult) {
 
+
+                return super.onJsPrompt(webView, s, s1, s2, jsPromptResult);
+            }
         });
         //通过addJavascriptInterface() AJavaScriptInterface类对象映射到JS的mjs对象
         mWebView.addJavascriptInterface(new JsToNativeObj(), "jsToNative1");
@@ -114,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class JsToNativeObj {
-
         // 定义JS需要调用的方法，被JS调用的方法必须加入@JavascriptInterface注解
         @JavascriptInterface
         public void call(String msg) {
